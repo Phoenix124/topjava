@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(Profiles.ACTIVE_DB)
-public class UserServiceTest {
+public class AbstractUserServiceTest {
 
     static {
         // Only for postgres driver logging
@@ -104,5 +105,13 @@ public class UserServiceTest {
     public void getAll() throws Exception {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
+    }
+
+    @Test
+    public void testEnable() {
+        service.enable(USER_ID, false);
+        Assert.assertFalse(service.get(USER_ID).isEnabled());
+        service.enable(USER_ID, true);
+        Assert.assertTrue(service.get(USER_ID).isEnabled());
     }
 }
