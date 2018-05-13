@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.service;
 
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -18,6 +20,10 @@ public interface UserService {
     User getByEmail(String email) throws NotFoundException;
 
     void update(User user);
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    void enable(int id, boolean enabled);
 
     void update(UserTo user);
 
